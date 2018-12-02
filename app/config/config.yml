@@ -72,5 +72,8 @@ sensio_framework_extra:
         annotations: false
 
 fos_rest:
+    exception:
+        enabled: true
+        exception_controller: 'AppBundle\Controller\API\ExceptionController::show'
     routing_loader:
         default_format: json

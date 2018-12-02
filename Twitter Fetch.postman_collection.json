@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "3e2c1315-0bc6-4f60-b61b-6638bc5a87d1",
+		"name": "Twitter Fetch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Latest Tweets",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8000/api/users/twitter/tweets/10",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"users",
+						"twitter",
+						"tweets",
+						"10"
+					]
+				},
+				"description": "Get the latest tweets from user."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "8235a625-dd10-40a8-9341-022153f19d74",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1ccb9bfb-e402-4f10-85a7-77542a7c1e2f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

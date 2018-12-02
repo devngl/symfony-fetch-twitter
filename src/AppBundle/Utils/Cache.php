@@ -7,7 +7,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class Cache
 {
-    /** @var CacheItemPoolInterface  */
+    /** @var CacheItemPoolInterface */
     private $cache;
 
     public function __construct(CacheItemPoolInterface $cache)

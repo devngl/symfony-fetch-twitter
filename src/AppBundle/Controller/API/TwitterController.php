@@ -56,19 +56,6 @@ class TwitterController extends APIController
     }
 
     /**
-     * @param $tweet
-     * @return array
-     * @throws \Exception
-     */
-    private function formatTweet($tweet)
-    {
-        return [
-            'created_at' => new \DateTime($tweet['created_at']),
-            'text' => mb_strtoupper($tweet['text']),
-        ];
-    }
-
-    /**
      * @param $userName
      * @param $quantity
      */
@@ -97,5 +84,18 @@ class TwitterController extends APIController
         if ($errors->count()) {
             throw new InvalidArgumentException($this->serialize($errors), Response::HTTP_PRECONDITION_FAILED);
         }
+    }
+
+    /**
+     * @param $tweet
+     * @return array
+     * @throws \Exception
+     */
+    private function formatTweet($tweet)
+    {
+        return [
+            'created_at' => new \DateTime($tweet['created_at']),
+            'text' => mb_strtoupper($tweet['text']),
+        ];
     }
 }

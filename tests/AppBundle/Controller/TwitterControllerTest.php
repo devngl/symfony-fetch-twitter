@@ -31,31 +31,6 @@ class TwitterControllerTest extends WebTestCase
     }
 
     /**
-     * @param string $username
-     * @param int $quantity
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function clearCachedKey($username = self::EXISTING_USERNAME, $quantity = 10)
-    {
-        $container = static::createClient()->getContainer();
-        $cacheKey = "tweets_{$username}_{$quantity}";
-        $container->get('cache.app')->deleteItem($cacheKey);
-    }
-
-    /**
-     * @param string $username
-     * @param int $quantity
-     * @return Client
-     */
-    private function requestUserTimeline($username = self::EXISTING_USERNAME, $quantity = 10): Client
-    {
-        $client = static::createClient();
-
-        $client->request('GET', "/api/users/{$username}/tweets/{$quantity}");
-        return $client;
-    }
-
-    /**
      * @test
      */
     public function request_respects_indicated_quantity_limit()
@@ -120,5 +95,32 @@ class TwitterControllerTest extends WebTestCase
         $response = $this->requestUserTimeline($invalidUsername, 10)->getResponse();
         $this->assertEquals(Response::HTTP_PRECONDITION_FAILED, $response->getStatusCode());
         $this->assertTrue(is_array(json_decode($response->getContent())));
+    }
+
+
+
+    /**
+     * @param string $username
+     * @param int $quantity
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function clearCachedKey($username = self::EXISTING_USERNAME, $quantity = 10)
+    {
+        $container = static::createClient()->getContainer();
+        $cacheKey = "tweets_{$username}_{$quantity}";
+        $container->get('cache.app')->deleteItem($cacheKey);
+    }
+
+    /**
+     * @param string $username
+     * @param int $quantity
+     * @return Client
+     */
+    private function requestUserTimeline($username = self::EXISTING_USERNAME, $quantity = 10): Client
+    {
+        $client = static::createClient();
+
+        $client->request('GET', "/api/users/{$username}/tweets/{$quantity}");
+        return $client;
     }
 }

@@ -75,5 +75,7 @@ fos_rest:
     exception:
         enabled: true
         exception_controller: 'AppBundle\Controller\API\ExceptionController::show'
+        messages:
+            'AppBundle\Controller\API\Exceptions\TwitterConnectorException': true
     routing_loader:
         default_format: json

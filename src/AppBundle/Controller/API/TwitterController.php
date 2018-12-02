@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\API;
 
+use AppBundle\Controller\API\Exceptions\TwitterConnectorException;
 use AppBundle\Services\SocialMediaConnector\TwitterConnector;
 use AppBundle\Utils\Cache;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,9 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 class TwitterController extends APIController
 {
+    // Cache lifespan in minutes
+    private const CACHE_LIFESPAN = 15;
+
     /** @var TwitterConnector */
     private $twitterConnector;
 
@@ -30,10 +34,38 @@ class TwitterController extends APIController
      * @param int $quantity
      * @return string
      * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getUserTweetsAction($userName, $quantity = 10)
     {
         $this->validateRequest($userName, $quantity);
+
+        $cacheKey = "tweets_{$userName}_{$quantity}";
+        $tweets = $this->cache
+            ->remember($cacheKey, self::CACHE_LIFESPAN, function () use ($userName, $quantity) {
+                $twitterResponse = $this->twitterConnector->fetchMessages($userName, $quantity);
+
+                if (\array_key_exists('errors', $twitterResponse)) {
+                    throw new TwitterConnectorException(json_encode($twitterResponse), 500);
+                }
+
+                return array_map([$this, 'formatTweet'], $twitterResponse);
+            });
+
+        return new Response($this->serialize($tweets), Response::HTTP_OK);
+    }
+
+    /**
+     * @param $tweet
+     * @return array
+     * @throws \Exception
+     */
+    private function formatTweet($tweet)
+    {
+        return [
+            'created_at' => new \DateTime($tweet['created_at']),
+            'text' => mb_strtoupper($tweet['text']),
+        ];
     }
 
     /**

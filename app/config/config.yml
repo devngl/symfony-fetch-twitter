@@ -30,6 +30,7 @@ framework:
     assets: ~
     php_errors:
         log: true
+    serializer: true
 
 # Twig Configuration
 twig:
@@ -69,3 +70,7 @@ swiftmailer:
 sensio_framework_extra:
    router:
         annotations: false
+
+fos_rest:
+    routing_loader:
+        default_format: json
